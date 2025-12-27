@@ -31,8 +31,8 @@
 
 ```bash
 # 创建虚拟环境
-python3 -m venv venv
-source venv/bin/activate  # Linux/Mac
+conda create -n quant_trading_venv python=3.12
+conda activate quant_trading_venv
 # 或 venv\Scripts\activate  # Windows
 
 # 安装依赖
