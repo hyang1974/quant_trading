@@ -1,0 +1,74 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# 配置文件（包含敏感信息）
+config/config.yaml
+.env
+*.key
+*.pem
+
+# 数据文件
+data/raw/*
+data/processed/*
+data/database/*.db
+data/database/*.db-journal
+!data/database/.gitkeep
+
+# 日志文件
+logs/*.log
+logs/*.txt
+!logs/.gitkeep
+
+# 回测结果
+results/*
+!results/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 操作系统
+.DS_Store
+Thumbs.db
+
+# 测试覆盖率
+.coverage
+htmlcov/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# 临时文件
+*.tmp
+*.bak
+*.cache
+
+# QMT相关（可能包含敏感信息）
+qmt_config/
+*.qmt

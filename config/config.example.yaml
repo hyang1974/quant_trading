@@ -1,0 +1,182 @@
+# 个人A股量化交易系统配置文件示例
+# 复制此文件为 config.yaml 并填写实际配置
+
+# 数据源配置
+data_source:
+  primary: "akshare"  # 主数据源: akshare, tushare
+  tushare:
+    token: ""  # tushare pro token，需要注册获取 https://tushare.pro/register
+  akshare:
+    # akshare无需配置，直接使用
+  update_schedule:
+    daily_update_time: "18:00"  # 每日数据更新时间
+    realtime_update_interval: 60  # 实时数据更新间隔（秒）
+
+# 数据库配置
+database:
+  type: "sqlite"  # sqlite, postgresql
+  sqlite:
+    path: "data/database/trading.db"
+  postgresql:
+    host: "localhost"
+    port: 5432
+    database: "quant_trading"
+    user: ""
+    password: ""
+  redis:
+    host: "localhost"
+    port: 6379
+    db: 0
+    password: ""
+
+# 华泰证券QMT配置
+qmt:
+  account_id: ""  # 账户ID
+  password: ""    # 密码（建议使用环境变量）
+  client_path: ""  # QMT客户端路径
+  mini_qmt: true  # 是否使用MiniQMT（轻量版）
+  trade_mode: "simulate"  # simulate: 模拟交易, real: 实盘交易
+  
+# 风险控制配置（针对20-40%回撤容忍度）
+risk_management:
+  # 仓位控制
+  max_single_position: 0.25  # 单只股票最大仓位比例 25%
+  max_total_position: 0.90  # 总仓位上限 90%
+  max_industry_position: 0.40  # 单个行业最大仓位 40%
+  
+  # 止损止盈
+  stop_loss_pct: -0.08  # 止损比例 -8%
+  take_profit_pct: 0.20  # 止盈比例 20%
+  trailing_stop: true  # 是否启用移动止损
+  trailing_stop_pct: 0.05  # 移动止损触发比例 5%
+  
+  # 风险限制
+  max_daily_loss: -0.03  # 单日最大亏损比例 -3%
+  max_consecutive_loss: 5  # 连续亏损次数限制
+  max_drawdown_alert: 0.30  # 回撤30%告警
+  max_drawdown_stop: 0.40  # 回撤40%停止交易
+  
+  # 时间止损
+  max_holding_days: 30  # 最大持仓天数
+  
+# 策略配置
+strategy:
+  default_capital: 100000  # 默认初始资金（元）
+  commission: 0.0003  # 手续费率 0.03%
+  slippage: 0.001  # 滑点 0.1%
+  min_trade_amount: 100  # 最小交易金额（元）
+  
+  # 策略参数
+  strategies:
+    ma_cross:
+      enabled: true
+      short_period: 5
+      long_period: 20
+      capital_ratio: 0.3  # 分配资金比例
+    
+    rsi_strategy:
+      enabled: false
+      rsi_period: 14
+      oversold: 30
+      overbought: 70
+      capital_ratio: 0.3
+
+# 交易执行配置
+trading:
+  # 交易时间
+  trade_start_time: "09:30"
+  trade_end_time: "15:00"
+  
+  # 订单类型
+  default_order_type: "limit"  # limit: 限价单, market: 市价单
+  
+  # 订单确认
+  require_manual_confirm: false  # 是否需要人工确认
+  large_order_threshold: 0.20  # 大额订单阈值（占总资金比例）
+  
+  # 重试机制
+  max_retry: 3
+  retry_interval: 5  # 重试间隔（秒）
+
+# 任务调度配置
+scheduler:
+  # 数据更新任务
+  data_update:
+    enabled: true
+    schedule: "0 18 * * *"  # 每天18:00执行
+  
+  # 策略计算任务
+  strategy_calculate:
+    enabled: true
+    schedule: "0 9 * * 1-5"  # 工作日9:00执行
+  
+  # 风险检查任务
+  risk_check:
+    enabled: true
+    schedule: "*/5 9-15 * * 1-5"  # 交易时间每5分钟检查
+
+# 日志配置
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  file: "logs/trading.log"
+  rotation: "100 MB"
+  retention: "30 days"
+  format: "{time:YYYY-MM-DD HH:mm:ss} | {level} | {module} | {message}"
+
+# 监控告警配置
+monitoring:
+  enabled: true
+  
+  # 告警方式
+  alert_methods:
+    - email  # 邮件
+    # - wechat  # 微信（需要配置）
+    # - dingtalk  # 钉钉（需要配置）
+  
+  # 邮件配置
+  email:
+    smtp_server: ""
+    smtp_port: 587
+    username: ""
+    password: ""
+    to_emails: []
+  
+  # 告警规则
+  alerts:
+    - name: "回撤告警"
+      condition: "drawdown > 0.30"
+      level: "warning"
+    
+    - name: "单日亏损告警"
+      condition: "daily_loss < -0.02"
+      level: "warning"
+    
+    - name: "系统异常告警"
+      condition: "system_error"
+      level: "error"
+  
+  # 监控指标
+  metrics:
+    - account_value
+    - total_position
+    - daily_pnl
+    - drawdown
+    - risk_metrics
+
+# 回测配置
+backtest:
+  start_date: "20230101"
+  end_date: ""  # 空则使用今天
+  initial_capital: 100000
+  commission: 0.0003
+  slippage: 0.001
+  
+  # 性能指标
+  metrics:
+    - total_return
+    - annual_return
+    - max_drawdown
+    - sharpe_ratio
+    - calmar_ratio
+    - win_rate
+    - profit_factor

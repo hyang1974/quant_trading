@@ -1,0 +1,49 @@
+# 核心依赖
+pandas>=2.0.0
+numpy>=1.24.0
+
+# 数据获取
+akshare>=1.12.0
+tushare>=1.2.89
+
+# 策略回测
+backtrader>=1.9.78.123
+
+# 数据可视化
+matplotlib>=3.7.0
+seaborn>=0.12.0
+plotly>=5.14.0
+
+# 数据库
+sqlalchemy>=2.0.0
+psycopg2-binary>=2.9.0  # PostgreSQL驱动
+
+# 缓存
+redis>=5.0.0
+
+# 任务调度
+APScheduler>=3.10.0
+
+# 工具库
+loguru>=0.7.0
+pyyaml>=6.0
+python-dotenv>=1.0.0
+requests>=2.31.0
+
+# 技术指标
+ta-lib>=0.4.28
+
+# 参数优化
+scipy>=1.11.0
+optuna>=3.3.0  # 超参数优化
+
+# 测试
+pytest>=7.4.0
+pytest-cov>=4.1.0
+
+# 代码质量
+black>=23.0.0
+flake8>=6.0.0
+
+# 监控（可选）
+# prometheus-client>=0.18.0
